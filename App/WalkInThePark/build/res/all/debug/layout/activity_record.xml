@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" xmlns:android="http://schemas.android.com/apk/res/android">
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/time_elapsed" android:layout_alignParentTop="true" android:layout_centerHorizontal="true"
+            android:layout_marginTop="21dp" android:text="00:00"/>
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Record"
+            android:id="@+id/record_button"
+            android:onClick="toggleRecord"
+            android:layout_alignParentBottom="true" android:layout_centerHorizontal="true"/>
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/distance_elapsed"
+            android:text="0.0 km" android:layout_below="@+id/time_elapsed" android:layout_centerHorizontal="true"
+            android:layout_marginTop="12dp"/>
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/current_speed"
+            android:layout_marginTop="11dp" android:text="0.0 km/h" android:layout_below="@+id/distance_elapsed"
+            android:layout_centerHorizontal="true"/>
+</RelativeLayout>

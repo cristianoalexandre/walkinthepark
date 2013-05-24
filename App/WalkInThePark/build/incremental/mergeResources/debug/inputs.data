@@ -1,0 +1,16 @@
+# incremental data. DO NOT EDIT.
+# format is <lastModified> <length> <SHA-1> <path>
+# Encoding is UTF-8
+1369339522000 211 4e1904afba59d31e5cd6133f6a4c360fa9a5913f /home/cristianoalexandre/AndroidStudioProjects/WalkInThePark/WalkInThePark/src/main/res/values/dimens.xml
+1369339522000 254 25b6404e44acb50c82590049639d4fb5fefbac8e /home/cristianoalexandre/AndroidStudioProjects/WalkInThePark/WalkInThePark/src/main/res/values-sw720dp-land/dimens.xml
+1369339522000 674 c78f92856947cb5742edaa3b94df76b0823dbbe7 /home/cristianoalexandre/AndroidStudioProjects/WalkInThePark/WalkInThePark/src/main/res/values/styles.xml
+1368799933000 276 a8c32eb9e696c4e873e4c319b57bdfd12f2eecda /home/cristianoalexandre/AndroidStudioProjects/WalkInThePark/WalkInThePark/src/main/res/layout/activity_plan.xml
+1368496141000 9397 4a5a9affbb731f195fc18fea78d51be7db7536a2 /home/cristianoalexandre/AndroidStudioProjects/WalkInThePark/WalkInThePark/src/main/res/drawable-hdpi/ic_launcher.png
+1368799901000 276 a8c32eb9e696c4e873e4c319b57bdfd12f2eecda /home/cristianoalexandre/AndroidStudioProjects/WalkInThePark/WalkInThePark/src/main/res/layout/activity_feed.xml
+1369339522000 181 84de2797380184d8b39af6f829afb092fb956173 /home/cristianoalexandre/AndroidStudioProjects/WalkInThePark/WalkInThePark/src/main/res/values-sw600dp/dimens.xml
+1368833297000 1479 f9b74081f7d91ac502af36f4f97341491434c231 /home/cristianoalexandre/AndroidStudioProjects/WalkInThePark/WalkInThePark/src/main/res/layout/activity_record.xml
+1368496141000 14383 82acdd75e3fcc36026109406625edc69d4d7212d /home/cristianoalexandre/AndroidStudioProjects/WalkInThePark/WalkInThePark/src/main/res/drawable-xhdpi/ic_launcher.png
+1369339522000 244 045ff451db7cd8e61285502b8c9bbf7405f2078d /home/cristianoalexandre/AndroidStudioProjects/WalkInThePark/WalkInThePark/src/main/res/menu/main.xml
+1369353457000 241 daa3efa32a2bdbd9931a0cfecd9b8fc3f18c22fa /home/cristianoalexandre/AndroidStudioProjects/WalkInThePark/WalkInThePark/src/main/res/values/strings.xml
+1368799740000 725 ad0c8e44409d38e7af0c78fd81afd21a08b18b6b /home/cristianoalexandre/AndroidStudioProjects/WalkInThePark/WalkInThePark/src/main/res/layout/activity_main.xml
+1368496141000 5237 7761bceaf18ed25cdba5f34bf00a55616d078acf /home/cristianoalexandre/AndroidStudioProjects/WalkInThePark/WalkInThePark/src/main/res/drawable-mdpi/ic_launcher.png
