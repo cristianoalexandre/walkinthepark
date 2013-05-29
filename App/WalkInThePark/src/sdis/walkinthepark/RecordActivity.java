@@ -6,18 +6,16 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import sdis.walkinthepark.types.NavPoint;
-import android.app.FragmentTransaction;
+import android.app.Activity;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.ViewFlipper;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -28,12 +26,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
-public class RecordActivity extends FragmentActivity {
+public class RecordActivity extends Activity {
 
     public static final int MINIMUM_ACCEPTABLE_ACCURACY = 200;
-    public static final int NULL_OPTION = -1;
-    public static final int CHANGE_TO_MAP_MENU = 1;
-    public static final int CHANGE_TO_DEFAULT_MENU = 0;
     private long startRecordTime;
     private long finishRecordTime;
     private long lastRecordTime;
@@ -42,16 +37,25 @@ public class RecordActivity extends FragmentActivity {
     private Location lastLocation = null;
     private double distanceElapsed;
     private ArrayList<NavPoint> navpoints;
-    private int whichMenu = CHANGE_TO_MAP_MENU;
-    private int lastOptionSelected = CHANGE_TO_DEFAULT_MENU;
     private GoogleMap mMap = null;
-    private MapFragment mMapFragment = null;
     private Marker currentPositionMarker;
     private ArrayList<Polyline> walkLines = new ArrayList<Polyline>();
+    private ViewFlipper flipper;
 
     public void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
 	setContentView(R.layout.activity_record);
+
+	flipper = (ViewFlipper) findViewById(R.id.flipper);
+	Button btn = (Button) findViewById(R.id.flip_me);
+
+	btn.setOnClickListener(new View.OnClickListener() {
+	    public void onClick(View view) {
+		flipper.showNext();
+	    }
+	});
+	
+	setUpMapIfNeeded();
 
 	// Acquire a reference to the system Location Manager
 	LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
@@ -166,33 +170,26 @@ public class RecordActivity extends FragmentActivity {
 
 		    @Override
 		    public void run() {
-			if (whichMenu == CHANGE_TO_MAP_MENU) {
-			    showTimeElapsed();
-			    showDistanceElapsed();
-			    showCurrentSpeed();
-			} else if (whichMenu == CHANGE_TO_DEFAULT_MENU) {
-			    System.out.println("Showing map...");
-			    System.out.println("Navpoints size: " + navpoints.size());
-			    System.out.println("Map:" + mMap);
-			    if (navpoints.isEmpty() == false && mMap != null) {
-				NavPoint nv = navpoints.get(navpoints.size() - 1);
-				System.out.println("Lat: " + nv.getLatitude() + "Long: " + nv.getLongitude());
-				if (currentPositionMarker == null) {
-				    currentPositionMarker = mMap.addMarker(new MarkerOptions().position(
-					    new LatLng(nv.getLatitude(), nv.getLongitude())).title("Marker"));
-				} else {
-				    currentPositionMarker.setPosition(new LatLng(nv.getLatitude(), nv.getLongitude()));
-				}
-
-				if (navpoints.size() >= 2) {
-				    NavPoint nv2 = navpoints.get(navpoints.size() - 2);
-				    walkLines.add(mMap.addPolyline(new PolylineOptions().add(
-					    new LatLng(nv2.getLatitude(), nv2.getLongitude()),
-					    new LatLng(nv.getLatitude(), nv.getLongitude()))));
-				}
-				mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
-					new LatLng(nv.getLatitude(), nv.getLongitude()), 15));
+			showTimeElapsed();
+			showDistanceElapsed();
+			showCurrentSpeed();
+			if (navpoints.isEmpty() == false && mMap != null) {
+			    System.out.println("Adding marker");
+			    NavPoint nv = navpoints.get(navpoints.size() - 1);
+			    if (currentPositionMarker == null) {
+				currentPositionMarker = mMap.addMarker(new MarkerOptions().position(
+					new LatLng(nv.getLatitude(), nv.getLongitude())).title("Marker"));
+			    } else {
+				currentPositionMarker.setPosition(new LatLng(nv.getLatitude(), nv.getLongitude()));
 			    }
+
+			    if (navpoints.size() >= 2) {
+				NavPoint nv2 = navpoints.get(navpoints.size() - 2);
+				walkLines.add(mMap.addPolyline(new PolylineOptions().add(new LatLng(nv2.getLatitude(),
+					nv2.getLongitude()), new LatLng(nv.getLatitude(), nv.getLongitude()))));
+			    }
+			    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+				    new LatLng(nv.getLatitude(), nv.getLongitude()), 15));
 			}
 		    }
 		});
@@ -209,70 +206,23 @@ public class RecordActivity extends FragmentActivity {
 	}
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-	// Handle item selection
-	switch (item.getItemId()) {
-	case R.id.showmaps:
-	    lastOptionSelected = CHANGE_TO_MAP_MENU;
-	    return true;
-	case R.id.showdata:
-	    lastOptionSelected = CHANGE_TO_DEFAULT_MENU;
-	    return true;
-	default:
-	    return super.onOptionsItemSelected(item);
-	}
-    }
-
-    @Override
-    public void onOptionsMenuClosed(Menu menu) {
-	super.onOptionsMenuClosed(menu);
-
-	switch (lastOptionSelected) {
-	case CHANGE_TO_DEFAULT_MENU:
-	    setContentView(R.layout.activity_record);
-	    whichMenu = CHANGE_TO_MAP_MENU;
-	    break;
-	case CHANGE_TO_MAP_MENU:
-	    setContentView(R.layout.activity_record_map);
-	    setUpMapIfNeeded();
-	    whichMenu = CHANGE_TO_DEFAULT_MENU;
-	    break;
-	}
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-	menu.clear();
-	switch (whichMenu) {
-	case CHANGE_TO_MAP_MENU:
-	    getMenuInflater().inflate(R.menu.record_menu, menu);
-	    lastOptionSelected = CHANGE_TO_DEFAULT_MENU;
-	    break;
-	case CHANGE_TO_DEFAULT_MENU:
-	    getMenuInflater().inflate(R.menu.record_menu_map, menu);
-	    lastOptionSelected = CHANGE_TO_MAP_MENU;
-	    break;
-	}
-
-	lastOptionSelected = NULL_OPTION;
-
-	return super.onPrepareOptionsMenu(menu);
-    }
-
     private void setUpMapIfNeeded() {
+	// Do a null check to confirm that we have not already instantiated the
+	// map.
 	if (mMap == null) {
-	    FragmentTransaction ft = getFragmentManager().beginTransaction();
-	    mMapFragment = MapFragment.newInstance();
-	    ft.add(R.id.map_root, mMapFragment);
-	    ft.commit();
+	    mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
 	    getFragmentManager().executePendingTransactions();
-	    mMap = mMapFragment.getMap();
+	    // Check if we were successful in obtaining the map.
+	    if (mMap != null) {
+		// The Map is verified. It is now safe to manipulate the map.
+
+	    }
 	}
     }
-
+    
     @Override
     protected void onResume() {
-	super.onResume();
+        super.onResume();
+        setUpMapIfNeeded();
     }
 }
